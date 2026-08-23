@@ -1,0 +1,26 @@
+REVOKE EXECUTE ON FUNCTION public.set_updated_at() FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.has_role(UUID, public.app_role) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.is_admin() FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.bootstrap_current_user(TEXT) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.place_order(UUID, INT, TEXT, TEXT) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.request_topup(NUMERIC, TEXT) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.admin_adjust_balance(UUID, NUMERIC, TEXT) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.admin_set_order_status(UUID, public.order_status, TEXT) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.admin_set_payment_status(UUID, public.payment_status) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.admin_reply_ticket(UUID, TEXT, public.ticket_status) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.admin_toggle_user(UUID, BOOLEAN) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.admin_stats() FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.public_stats() FROM PUBLIC;
+
+GRANT EXECUTE ON FUNCTION public.has_role(UUID, public.app_role) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.bootstrap_current_user(TEXT) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.place_order(UUID, INT, TEXT, TEXT) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.request_topup(NUMERIC, TEXT) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.admin_adjust_balance(UUID, NUMERIC, TEXT) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.admin_set_order_status(UUID, public.order_status, TEXT) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.admin_set_payment_status(UUID, public.payment_status) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.admin_reply_ticket(UUID, TEXT, public.ticket_status) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.admin_toggle_user(UUID, BOOLEAN) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.admin_stats() TO authenticated;
+GRANT EXECUTE ON FUNCTION public.public_stats() TO anon, authenticated;
