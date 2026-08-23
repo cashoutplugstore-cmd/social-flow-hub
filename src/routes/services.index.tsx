@@ -62,8 +62,8 @@ function ServicesPage() {
       if (!term) return true;
       return (
         s.name_ar.toLowerCase().includes(term) ||
-        s.name_en.toLowerCase().includes(term) ||
-        s.short_description_ar.toLowerCase().includes(term)
+        s.slug.toLowerCase().includes(term) ||
+        (s.short_description_ar ?? "").toLowerCase().includes(term)
       );
     });
   }, [data.services, catById, activeCategory, q]);
