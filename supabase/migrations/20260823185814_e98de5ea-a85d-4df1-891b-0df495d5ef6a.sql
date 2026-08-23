@@ -1,0 +1,12 @@
+REVOKE EXECUTE ON FUNCTION public.set_updated_at() FROM anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.has_role(UUID, public.app_role) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.is_admin() FROM anon;
+REVOKE EXECUTE ON FUNCTION public.bootstrap_current_user(TEXT) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.place_order(UUID, INT, TEXT, TEXT) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.request_topup(NUMERIC, TEXT) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_adjust_balance(UUID, NUMERIC, TEXT) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_set_order_status(UUID, public.order_status, TEXT) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_set_payment_status(UUID, public.payment_status) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_reply_ticket(UUID, TEXT, public.ticket_status) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_toggle_user(UUID, BOOLEAN) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_stats() FROM anon;
