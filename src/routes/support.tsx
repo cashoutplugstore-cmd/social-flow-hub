@@ -40,7 +40,7 @@ function SupportPage() {
 
   async function submitTicket() {
     if (!userId) {
-      await navigate({ to: "/login", search: { redirect: "/support" } });
+      await navigate({ to: "/login" });
       return;
     }
     const cleanSubject = subject.trim();
@@ -92,14 +92,14 @@ function SupportPage() {
               <Headphones className="text-primary mx-auto mb-3 size-8" />
               <h3 className="font-bold">سجّل دخولك أولاً</h3>
               <p className="text-muted-foreground mt-1 text-sm">تحتاج إلى حساب حتى نتمكن من ربط التذكرة بك.</p>
-              <Button className="mt-5" asChild><Link to="/login" search={{ redirect: "/support" }}>تسجيل الدخول</Link></Button>
+              <Button className="mt-5" asChild><Link to="/login">تسجيل الدخول</Link></Button>
             </div>
           ) : (
             <div className="space-y-5">
               <div><label className="mb-2 block text-sm font-semibold">عنوان التذكرة</label><Input value={subject} onChange={(e) => setSubject(e.target.value)} maxLength={120} placeholder="مثلاً: مشكلة في طلبي" /></div>
               <div><label className="mb-2 block text-sm font-semibold">القسم</label><Select value={department} onValueChange={setDepartment}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="support">الدعم العام</SelectItem><SelectItem value="orders">الطلبات</SelectItem><SelectItem value="payments">المدفوعات والمحفظة</SelectItem><SelectItem value="services">الخدمات</SelectItem></SelectContent></Select></div>
               <div><label className="mb-2 block text-sm font-semibold">التفاصيل</label><Textarea value={message} onChange={(e) => setMessage(e.target.value)} maxLength={4000} rows={7} placeholder="اكتب تفاصيل المشكلة أو استفسارك هنا…" /></div>
-              <Button variant="hero" className="w-full sm:w-auto" onClick={submitTicket} disabled={submitting}>{submitting ? <Loader2 className="animate-spin" /> : <Send />} إرسال التذكرة</Button>
+              <Button variant="hero" className="w-full sm:w-auto" onClick={() => void submitTicket()} disabled={submitting}>{submitting ? <Loader2 className="animate-spin" /> : <Send />} إرسال التذكرة</Button>
             </div>
           )}
         </section>
