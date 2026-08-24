@@ -17,6 +17,7 @@ import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as SupportRouteImport } from './routes/support'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 
 const IndexRoute = IndexRouteImport.update({ id: '/', path: '/', getParentRoute: () => rootRouteImport } as any)
 const FaqRoute = FaqRouteImport.update({ id: '/faq', path: '/faq', getParentRoute: () => rootRouteImport } as any)
@@ -27,6 +28,7 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({ id: '/services/$slug'
 const LoginRoute = LoginRouteImport.update({ id: '/login', path: '/login', getParentRoute: () => rootRouteImport } as any)
 const RegisterRoute = RegisterRouteImport.update({ id: '/register', path: '/register', getParentRoute: () => rootRouteImport } as any)
 const SupportRoute = SupportRouteImport.update({ id: '/support', path: '/support', getParentRoute: () => rootRouteImport } as any)
+const CheckoutRoute = CheckoutRouteImport.update({ id: '/checkout', path: '/checkout', getParentRoute: () => rootRouteImport } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -38,6 +40,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/support': typeof SupportRoute
+  '/checkout': typeof CheckoutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -49,6 +52,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/support': typeof SupportRoute
+  '/checkout': typeof CheckoutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -61,13 +65,14 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/support': typeof SupportRoute
+  '/checkout': typeof CheckoutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faq' | '/privacy' | '/terms' | '/services/$slug' | '/services/' | '/login' | '/register' | '/support'
+  fullPaths: '/' | '/faq' | '/privacy' | '/terms' | '/services/$slug' | '/services/' | '/login' | '/register' | '/support' | '/checkout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faq' | '/terms' | '/privacy' | '/services/$slug' | '/services' | '/login' | '/register' | '/support'
-  id: '__root__' | '/' | '/faq' | '/privacy' | '/terms' | '/services/$slug' | '/services/' | '/login' | '/register' | '/support'
+  to: '/' | '/faq' | '/terms' | '/privacy' | '/services/$slug' | '/services' | '/login' | '/register' | '/support' | '/checkout'
+  id: '__root__' | '/' | '/faq' | '/privacy' | '/terms' | '/services/$slug' | '/services/' | '/login' | '/register' | '/support' | '/checkout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -80,6 +85,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   SupportRoute: typeof SupportRoute
+  CheckoutRoute: typeof CheckoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -93,6 +99,7 @@ declare module '@tanstack/react-router' {
     '/login': { id: '/login'; path: '/login'; fullPath: '/login'; preLoaderRoute: typeof LoginRouteImport; parentRoute: typeof rootRouteImport }
     '/register': { id: '/register'; path: '/register'; fullPath: '/register'; preLoaderRoute: typeof RegisterRouteImport; parentRoute: typeof rootRouteImport }
     '/support': { id: '/support'; path: '/support'; fullPath: '/support'; preLoaderRoute: typeof SupportRouteImport; parentRoute: typeof rootRouteImport }
+    '/checkout': { id: '/checkout'; path: '/checkout', fullPath: '/checkout'; preLoaderRoute: typeof CheckoutRouteImport; parentRoute: typeof rootRouteImport }
   }
 }
 
@@ -106,6 +113,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute,
   RegisterRoute,
   SupportRoute,
+  CheckoutRoute,
 }
 export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>()
 
