@@ -109,7 +109,7 @@ function ServiceDetail() {
       unitSize: service.unit_size,
       total,
       target: target.trim(),
-      note: note.trim() || undefined,
+      ...(note.trim() ? { note: note.trim() } : {}),
     });
     toast.success("تمت الإضافة إلى السلة");
     if (goCheckout) void navigate({ to: "/checkout" });
