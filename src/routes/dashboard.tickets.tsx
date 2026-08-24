@@ -1,0 +1,9 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Headphones, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PageHeader, PageShell } from "@/components/page-shell";
+import { supabase } from "@/integrations/supabase/client";
+import { dateAr } from "@/lib/format";
+export const Route=createFileRoute("/dashboard/tickets")({head:()=>({meta:[{title:"تذاكري | ViralHub"}]}),component:TicketsPage});
+function TicketsPage(){const[tickets,setTickets]=useState<any[]>([]),[loading,setLoading]=useState(true);useEffect(()=>{let a=true;(async()=>{const{data}=await supabase.auth.getUser();if(!data.user){window.location.href="/login";return}const{data:rows}=await supabase.from("tickets").select("id,subject,department,priority,status,created_at,updated_at").eq("user_id",data.user.id).order("updated_at",{ascending:false});if(a){setTickets(rows??[]);setLoading(false)}})();return()=>{a=false}},[]);return <PageShell><PageHeader eyebrow="حسابي" title="تذاكري" description="تابع طلبات الدعم والمحادثات المفتوحة."/><div className="mx-auto max-w-5xl px-4 py-10">{loading?<div className="flex justify-center py-20"><Loader2 className="animate-spin"/></div>:tickets.length===0?<div className="surface-card rounded-3xl p-10 text-center"><Headphones className="text-primary mx-auto mb-4 size-10"/><h2 className="text-xl font-bold">لا توجد تذاكر</h2><Button className="mt-5" variant="hero" asChild><Link to="/support">فتح تذكرة</Link></Button></div>:<div className="space-y-3">{tickets.map(t=><div key={t.id} className="surface-card rounded-2xl p-5"><div className="flex flex-wrap justify-between gap-3"><div><h2 className="font-bold">{t.subject}</h2><p className="text-muted-foreground mt-1 text-xs">{t.department} · {dateAr(t.updated_at)}</p></div><span className="rounded-full border px-3 py-1 text-xs">{t.status}</span></div></div>)}</div>}</div></PageShell>}
