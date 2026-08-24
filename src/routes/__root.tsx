@@ -20,14 +20,9 @@ function NotFoundComponent() {
       <div className="max-w-md text-center">
         <h1 className="gradient-text text-7xl font-extrabold">404</h1>
         <h2 className="mt-4 text-xl font-bold">الصفحة غير موجودة</h2>
-        <p className="text-muted-foreground mt-2 text-sm">
-          الرابط الذي تحاول الوصول إليه غير متاح أو تم نقله.
-        </p>
+        <p className="text-muted-foreground mt-2 text-sm">الرابط الذي تحاول الوصول إليه غير متاح أو تم نقله.</p>
         <div className="mt-6">
-          <Link
-            to="/"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-bold transition-colors"
-          >
+          <Link to="/" className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-bold transition-colors">
             العودة للرئيسية
           </Link>
         </div>
@@ -47,25 +42,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="bg-background flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-bold tracking-tight">تعذّر تحميل الصفحة</h1>
-        <p className="text-muted-foreground mt-2 text-sm">
-          حدث خطأ غير متوقع. جرّب التحديث أو العودة للرئيسية.
-        </p>
+        <p className="text-muted-foreground mt-2 text-sm">حدث خطأ غير متوقع. جرّب التحديث أو العودة للرئيسية.</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-bold transition-colors"
-          >
-            إعادة المحاولة
-          </button>
-          <a
-            href="/"
-            className="border-input bg-background hover:bg-accent inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-bold transition-colors"
-          >
-            الرئيسية
-          </a>
+          <button onClick={() => { router.invalidate(); reset(); }} className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-bold transition-colors">إعادة المحاولة</button>
+          <a href="/" className="border-input bg-background hover:bg-accent inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-bold transition-colors">الرئيسية</a>
         </div>
       </div>
     </div>
@@ -78,11 +58,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "ViralHub | مركز خدمات السوشيال ميديا" },
-      {
-        name: "description",
-        content:
-          "ViralHub منصة عربية لبيع خدمات السوشيال ميديا: متابعين، مشاهدات، تفاعل، تسويق وتصميم بأسعار تنافسية وتنفيذ سريع.",
-      },
+      { name: "description", content: "ViralHub منصة عربية لبيع خدمات السوشيال ميديا: متابعين، مشاهدات، تفاعل، تسويق وتصميم بأسعار تنافسية وتنفيذ سريع." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -90,10 +66,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap",
-      },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -106,13 +79,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: ReactNode }) {
   return (
     <html lang="ar" dir="rtl">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
+      <head><HeadContent /></head>
+      <body>{children}<Scripts /></body>
     </html>
   );
 }
@@ -122,8 +90,13 @@ function RootComponent() {
   const router = useRouter();
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (!["SIGNED_IN", "SIGNED_OUT", "USER_UPDATED"].includes(event)) return;
+      if (event === "SIGNED_IN" && session?.user) {
+        void supabase.rpc("bootstrap_current_user", {
+          _display_name: session.user.user_metadata?.display_name ?? session.user.user_metadata?.full_name ?? null,
+        });
+      }
       void router.invalidate();
       if (event !== "SIGNED_OUT") void queryClient.invalidateQueries();
     });
@@ -132,7 +105,6 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
