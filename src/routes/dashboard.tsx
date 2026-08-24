@@ -1,0 +1,63 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ClipboardList, Headphones, Loader2, UserRound, WalletCards } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PageHeader, PageShell } from "@/components/page-shell";
+import { supabase } from "@/integrations/supabase/client";
+import { money, num } from "@/lib/format";
+
+export const Route = createFileRoute("/dashboard")({
+  head: () => ({ meta: [{ title: "لوحة التحكم | ViralHub" }] }),
+  component: DashboardPage,
+});
+
+function DashboardPage() {
+  const [loading, setLoading] = useState(true);
+  const [name, setName] = useState("مستخدم");
+  const [balance, setBalance] = useState(0);
+  const [orders, setOrders] = useState(0);
+  const [tickets, setTickets] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    async function load() {
+      const { data: auth } = await supabase.auth.getUser();
+      if (!auth.user) { window.location.href = "/login"; return; }
+      const [profile, wallet, orderRows, ticketRows] = await Promise.all([
+        supabase.from("profiles").select("display_name,username").eq("id", auth.user.id).maybeSingle(),
+        supabase.from("wallets").select("balance").eq("user_id", auth.user.id).maybeSingle(),
+        supabase.from("orders").select("id", { count: "exact", head: true }).eq("user_id", auth.user.id),
+        supabase.from("tickets").select("id", { count: "exact", head: true }).eq("user_id", auth.user.id),
+      ]);
+      if (!active) return;
+      setName(profile.data?.display_name || profile.data?.username || auth.user.email?.split("@")[0] || "مستخدم");
+      setBalance(wallet.data?.balance ?? 0);
+      setOrders(orderRows.count ?? 0);
+      setTickets(ticketRows.count ?? 0);
+      setLoading(false);
+    }
+    void load();
+    return () => { active = false; };
+  }, []);
+
+  if (loading) return <PageShell><div className="flex min-h-[50vh] items-center justify-center"><Loader2 className="animate-spin" /></div></PageShell>;
+
+  const cards = [
+    { title: "الرصيد", value: money(balance), icon: WalletCards, to: "/dashboard/wallet" },
+    { title: "الطلبات", value: num(orders), icon: ClipboardList, to: "/dashboard/orders" },
+    { title: "التذاكر", value: num(tickets), icon: Headphones, to: "/dashboard/tickets" },
+  ] as const;
+
+  return <PageShell>
+    <PageHeader eyebrow="حسابي" title={`أهلًا ${name}`} description="تابع طلباتك ورصيدك ودعمك من مكان واحد." />
+    <div className="mx-auto max-w-6xl px-4 py-10">
+      <div className="grid gap-4 md:grid-cols-3">
+        {cards.map(({ title, value, icon: Icon, to }) => <Link key={title} to={to} className="surface-card rounded-2xl p-6 transition-transform hover:-translate-y-0.5"><Icon className="text-primary mb-5 size-6" /><p className="text-muted-foreground text-sm">{title}</p><p className="mt-1 text-2xl font-extrabold">{value}</p></Link>)}
+      </div>
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <div className="surface-card rounded-2xl p-6"><UserRound className="text-primary mb-4 size-6" /><h2 className="font-bold">ملفي الشخصي</h2><p className="text-muted-foreground mt-1 text-sm">إدارة بيانات حسابك.</p><Button className="mt-5" variant="outline" asChild><Link to="/dashboard/profile">فتح الملف</Link></Button></div>
+        <div className="surface-card rounded-2xl p-6"><Headphones className="text-primary mb-4 size-6" /><h2 className="font-bold">تحتاج مساعدة؟</h2><p className="text-muted-foreground mt-1 text-sm">افتح تذكرة وسيتابع فريق الدعم طلبك.</p><Button className="mt-5" variant="hero" asChild><Link to="/support">مركز الدعم</Link></Button></div>
+      </div>
+    </div>
+  </PageShell>;
+}
