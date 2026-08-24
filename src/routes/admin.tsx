@@ -14,19 +14,36 @@ function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [allowed, setAllowed] = useState(false);
   const [stats, setStats] = useState<Record<string, number>>({});
+  const [error, setError] = useState("");
 
   useEffect(() => { let active = true; (async () => {
-    const { data: auth } = await supabase.auth.getUser();
-    if (!auth.user) { window.location.href = "/login"; return; }
-    const { data: role } = await supabase.from("user_roles").select("role").eq("user_id", auth.user.id).maybeSingle();
-    const isAdmin = role?.role === "admin" || role?.role === "super_admin";
+    const { data: auth, error: authError } = await supabase.auth.getUser();
+    if (authError || !auth.user) { window.location.href = "/login"; return; }
+
+    const { data: roles, error: roleError } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", auth.user.id);
+
+    if (roleError) {
+      if (active) { setError(roleError.message); setLoading(false); }
+      return;
+    }
+
+    const isAdmin = (roles ?? []).some((r) => r.role === "admin");
     if (!isAdmin) { if (active) { setLoading(false); setAllowed(false); } return; }
-    const { data } = await supabase.rpc("admin_stats");
-    if (active) { setStats((data ?? {}) as Record<string, number>); setAllowed(true); setLoading(false); }
+
+    const { data, error: statsError } = await supabase.rpc("admin_stats");
+    if (active) {
+      if (statsError) setError(statsError.message);
+      setStats((data ?? {}) as Record<string, number>);
+      setAllowed(true);
+      setLoading(false);
+    }
   })(); return () => { active = false; }; }, []);
 
   if (loading) return <PageShell><div className="flex min-h-[50vh] items-center justify-center"><Loader2 className="animate-spin" /></div></PageShell>;
-  if (!allowed) return <PageShell><div className="mx-auto max-w-xl px-4 py-20 text-center"><ShieldCheck className="text-destructive mx-auto size-12" /><h1 className="mt-4 text-2xl font-extrabold">غير مصرح</h1><p className="text-muted-foreground mt-2">ليس لديك صلاحية الوصول إلى لوحة الإدارة.</p><Link className="text-primary mt-5 inline-block font-bold" to="/">العودة للرئيسية</Link></div></PageShell>;
+  if (!allowed) return <PageShell><div className="mx-auto max-w-xl px-4 py-20 text-center"><ShieldCheck className="text-destructive mx-auto size-12" /><h1 className="mt-4 text-2xl font-extrabold">غير مصرح</h1><p className="text-muted-foreground mt-2">ليس لديك صلاحية الوصول إلى لوحة الإدارة.</p>{error && <p className="text-destructive mt-3 text-xs break-all">{error}</p>}<Link className="text-primary mt-5 inline-block font-bold" to="/">العودة للرئيسية</Link></div></PageShell>;
 
   const cards = [
     ["المستخدمون", stats.users ?? stats.total_users ?? 0, Users],
