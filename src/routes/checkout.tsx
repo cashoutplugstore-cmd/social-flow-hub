@@ -51,10 +51,10 @@ function CheckoutPage() {
     setPlacing(true);
     for (const item of items) {
       const { error } = await supabase.rpc("place_order", {
-        p_service_id: item.serviceId,
-        p_quantity: item.quantity,
-        p_target_input: item.target,
-        p_extra_note: note.trim() || item.note || null,
+        _service_id: item.serviceId,
+        _quantity: item.quantity,
+        _target_input: item.target,
+        _extra_note: note.trim() || item.note || null,
       });
       if (error) {
         setPlacing(false);
