@@ -27,6 +27,7 @@ import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardNotificationsRouteImport } from './routes/dashboard.notifications'
 import { Route as DashboardOrdersRouteImport } from './routes/dashboard.orders'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard.profile'
 import { Route as DashboardTicketsRouteImport } from './routes/dashboard.tickets'
@@ -126,6 +127,11 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardNotificationsRoute = DashboardNotificationsRouteImport.update({
+  id: '/dashboard/notifications',
+  path: '/dashboard/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardOrdersRoute = DashboardOrdersRouteImport.update({
   id: '/dashboard/orders',
   path: '/dashboard/orders',
@@ -184,6 +190,7 @@ export interface FileRoutesByFullPath {
   '/admin/services': typeof AdminServicesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/tickets': typeof DashboardTicketsRoute
@@ -212,6 +219,7 @@ export interface FileRoutesByTo {
   '/admin/services': typeof AdminServicesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/tickets': typeof DashboardTicketsRoute
@@ -241,6 +249,7 @@ export interface FileRoutesById {
   '/admin/services': typeof AdminServicesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/users': typeof AdminUsersRoute
+  '/dashboard/notifications': typeof DashboardNotificationsRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/tickets': typeof DashboardTicketsRoute
@@ -271,6 +280,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/tickets'
     | '/admin/users'
+    | '/dashboard/notifications'
     | '/dashboard/orders'
     | '/dashboard/profile'
     | '/dashboard/tickets'
@@ -299,6 +309,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/tickets'
     | '/admin/users'
+    | '/dashboard/notifications'
     | '/dashboard/orders'
     | '/dashboard/profile'
     | '/dashboard/tickets'
@@ -327,6 +338,7 @@ export interface FileRouteTypes {
     | '/admin/services'
     | '/admin/tickets'
     | '/admin/users'
+    | '/dashboard/notifications'
     | '/dashboard/orders'
     | '/dashboard/profile'
     | '/dashboard/tickets'
@@ -356,6 +368,7 @@ export interface RootRouteChildren {
   AdminServicesRoute: typeof AdminServicesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminUsersRoute: typeof AdminUsersRoute
+  DashboardNotificationsRoute: typeof DashboardNotificationsRoute
   DashboardOrdersRoute: typeof DashboardOrdersRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardTicketsRoute: typeof DashboardTicketsRoute
@@ -496,6 +509,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/notifications': {
+      id: '/dashboard/notifications'
+      path: '/dashboard/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof DashboardNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/orders': {
       id: '/dashboard/orders'
       path: '/dashboard/orders'
@@ -572,6 +592,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminServicesRoute: AdminServicesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminUsersRoute: AdminUsersRoute,
+  DashboardNotificationsRoute: DashboardNotificationsRoute,
   DashboardOrdersRoute: DashboardOrdersRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardTicketsRoute: DashboardTicketsRoute,
