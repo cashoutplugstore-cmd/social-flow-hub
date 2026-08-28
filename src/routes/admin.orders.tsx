@@ -50,9 +50,9 @@ function AdminOrders() {
   useEffect(() => { setPage(1); }, [search, status]);
   useEffect(() => { if (page > pageCount) setPage(pageCount); }, [page, pageCount]);
 
-  const setStatusForOrder = async (id: string, nextStatus: string) => {
+  const setStatusForOrder = async (id: string, nextStatus: 'pending' | 'paid' | 'processing' | 'completed' | 'cancelled' | 'refunded') => {
     setBusy(id);
-    const { error } = await supabase.rpc("admin_set_order_status", { _order_id: id, _status: nextStatus, _admin_note: null });
+    const { error } = await supabase.rpc("admin_set_order_status", { _order_id: id, _status: nextStatus, _admin_note: undefined });
     setBusy(null);
     if (error) { toast.error(error.message); return; }
     toast.success("تم تحديث حالة الطلب");

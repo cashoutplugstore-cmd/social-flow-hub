@@ -35,7 +35,7 @@ function AdminServices() {
     if (catsError) toast.error(`الأقسام: ${catsError.message}`);
     setRows((services ?? []) as ServiceRow[]);
     setCategories((cats ?? []) as Category[]);
-    setForm((current) => current.category_id || !(cats?.length) ? current : { ...current, category_id: cats[0].id });
+    setForm((current) => current.category_id || !(cats?.length) ? current : { ...current, category_id: cats[0]!.id });
     setLoading(false);
   };
 

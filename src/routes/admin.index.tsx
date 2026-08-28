@@ -10,7 +10,7 @@ export const Route = createFileRoute("/admin/")({
   component: AdminPage,
 });
 
-type Analytics = Record<string, any>;
+type Analytics = any;
 
 function AdminPage() {
   const [loading, setLoading] = useState(true);

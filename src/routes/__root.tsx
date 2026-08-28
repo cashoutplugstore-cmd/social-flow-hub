@@ -94,7 +94,7 @@ function RootComponent() {
       if (!["SIGNED_IN", "SIGNED_OUT", "USER_UPDATED"].includes(event)) return;
       if (event === "SIGNED_IN" && session?.user) {
         void supabase.rpc("bootstrap_current_user", {
-          _display_name: session.user.user_metadata?.display_name ?? session.user.user_metadata?.full_name ?? null,
+          _display_name: session.user.user_metadata?.['display_name'] ?? session.user.user_metadata?.['full_name'] ?? null,
         });
       }
       void router.invalidate();
