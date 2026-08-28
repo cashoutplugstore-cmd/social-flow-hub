@@ -54,7 +54,7 @@ function AdminOrders() {
     setBusy(id);
     const { error } = await supabase.rpc("admin_set_order_status", { _order_id: id, _status: nextStatus, _admin_note: null });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تم تحديث حالة الطلب");
     await load();
   };

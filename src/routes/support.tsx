@@ -45,8 +45,8 @@ function SupportPage() {
     }
     const cleanSubject = subject.trim();
     const cleanMessage = message.trim();
-    if (cleanSubject.length < 3) return toast.error("اكتب عنواناً واضحاً للتذكرة");
-    if (cleanMessage.length < 5) return toast.error("اكتب تفاصيل المشكلة أو طلبك");
+    if (cleanSubject.length < 3) { toast.error("اكتب عنواناً واضحاً للتذكرة"); return; }
+    if (cleanMessage.length < 5) { toast.error("اكتب تفاصيل المشكلة أو طلبك"); return; }
 
     setSubmitting(true);
     const { data: ticket, error: ticketError } = await supabase

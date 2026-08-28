@@ -53,16 +53,16 @@ function AdminServices() {
   }, [rows, categories, query, activeFilter]);
 
   const save = async () => {
-    if (!form.category_id) return toast.error("اختر قسم الخدمة");
-    if (!form.name_ar.trim() || !form.slug.trim()) return toast.error("أدخل اسم الخدمة والـslug");
+    if (!form.category_id) { toast.error("اختر قسم الخدمة"); return; }
+    if (!form.name_ar.trim() || !form.slug.trim()) { toast.error("أدخل اسم الخدمة والـslug"); return; }
     const price = Number(form.price_per_unit), unit = Number(form.unit_size), min = Number(form.min_quantity), max = Number(form.max_quantity);
-    if (![price, unit, min, max].every(Number.isFinite) || price < 0 || unit <= 0 || min <= 0 || max < min) return toast.error("تحقق من السعر والحدود والأرقام");
+    if (![price, unit, min, max].every(Number.isFinite) || price < 0 || unit <= 0 || min <= 0 || max < min) { toast.error("تحقق من السعر والحدود والأرقام"); return; }
     setSaving(true);
     const payload = { category_id: form.category_id, name_ar: form.name_ar.trim(), slug: form.slug.trim(), price_per_unit: price, unit_size: unit, min_quantity: min, max_quantity: max, is_active: true };
     const queryBuilder = editing ? supabase.from("services").update(payload).eq("id", editing) : supabase.from("services").insert(payload);
     const { error } = await queryBuilder;
     setSaving(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(editing ? "تم تعديل الخدمة" : "تم نشر الخدمة");
     setForm({ ...empty, category_id: form.category_id });
     setEditing(null);

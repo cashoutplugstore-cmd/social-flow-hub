@@ -57,14 +57,14 @@ function NotificationsPage() {
     setBusy(true);
     const { error } = await supabase.from("notifications").update({ is_read: true }).eq("is_read", false);
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تم تعليم كل الإشعارات كمقروءة");
     await load();
   };
 
   const markOne = async (id: string) => {
     const { error } = await supabase.from("notifications").update({ is_read: true }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setRows((prev) => prev.map((r) => (r.id === id ? { ...r, is_read: true } : r)));
   };
 
