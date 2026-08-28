@@ -23,6 +23,7 @@ import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
 import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
+import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
 import { Route as AdminTicketsRouteImport } from './routes/admin.tickets'
 import { Route as AdminUsersRouteImport } from './routes/admin.users'
@@ -33,7 +34,7 @@ import { Route as DashboardWalletRouteImport } from './routes/dashboard.wallet'
 import { Route as OrderIdRouteImport } from './routes/order.$id'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
-import { Route as DashboardWalletTopupRouteImport } from './routes/dashboard.wallet.topup'
+import { Route as DashboardWalletTopupRouteImport } from './routes/dashboard.wallet_.topup'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -105,6 +106,11 @@ const AdminProvidersRoute = AdminProvidersRouteImport.update({
   path: '/providers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminReviewsRoute = AdminReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminServicesRoute = AdminServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -156,9 +162,9 @@ const ServicesSlugRoute = ServicesSlugRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardWalletTopupRoute = DashboardWalletTopupRouteImport.update({
-  id: '/topup',
-  path: '/topup',
-  getParentRoute: () => DashboardWalletRoute,
+  id: '/wallet_/topup',
+  path: '/wallet/topup',
+  getParentRoute: () => DashboardRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -176,13 +182,14 @@ export interface FileRoutesByFullPath {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/tickets': typeof DashboardTicketsRoute
-  '/dashboard/wallet': typeof DashboardWalletRouteWithChildren
+  '/dashboard/wallet': typeof DashboardWalletRoute
   '/order/$id': typeof OrderIdRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
@@ -203,13 +210,14 @@ export interface FileRoutesByTo {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/tickets': typeof DashboardTicketsRoute
-  '/dashboard/wallet': typeof DashboardWalletRouteWithChildren
+  '/dashboard/wallet': typeof DashboardWalletRoute
   '/order/$id': typeof OrderIdRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services': typeof ServicesIndexRoute
@@ -231,17 +239,18 @@ export interface FileRoutesById {
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
   '/admin/providers': typeof AdminProvidersRoute
+  '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
   '/admin/tickets': typeof AdminTicketsRoute
   '/admin/users': typeof AdminUsersRoute
   '/dashboard/orders': typeof DashboardOrdersRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/dashboard/tickets': typeof DashboardTicketsRoute
-  '/dashboard/wallet': typeof DashboardWalletRouteWithChildren
+  '/dashboard/wallet': typeof DashboardWalletRoute
   '/order/$id': typeof OrderIdRoute
   '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
-  '/dashboard/wallet/topup': typeof DashboardWalletTopupRoute
+  '/dashboard/wallet_/topup': typeof DashboardWalletTopupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -260,6 +269,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/providers'
+    | '/admin/reviews'
     | '/admin/services'
     | '/admin/tickets'
     | '/admin/users'
@@ -287,6 +297,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/providers'
+    | '/admin/reviews'
     | '/admin/services'
     | '/admin/tickets'
     | '/admin/users'
@@ -314,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin/orders'
     | '/admin/payments'
     | '/admin/providers'
+    | '/admin/reviews'
     | '/admin/services'
     | '/admin/tickets'
     | '/admin/users'
@@ -324,7 +336,7 @@ export interface FileRouteTypes {
     | '/order/$id'
     | '/services/$slug'
     | '/services/'
-    | '/dashboard/wallet/topup'
+    | '/dashboard/wallet_/topup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -443,6 +455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminProvidersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/reviews': {
+      id: '/admin/reviews'
+      path: '/reviews'
+      fullPath: '/admin/reviews'
+      preLoaderRoute: typeof AdminReviewsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/services': {
       id: '/admin/services'
       path: '/services'
@@ -513,12 +532,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/wallet/topup': {
-      id: '/dashboard/wallet/topup'
-      path: '/topup'
+    '/dashboard/wallet_/topup': {
+      id: '/dashboard/wallet_/topup'
+      path: '/wallet/topup'
       fullPath: '/dashboard/wallet/topup'
       preLoaderRoute: typeof DashboardWalletTopupRouteImport
-      parentRoute: typeof DashboardWalletRoute
+      parentRoute: typeof DashboardRoute
     }
   }
 }
@@ -528,6 +547,7 @@ interface AdminRouteChildren {
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
   AdminProvidersRoute: typeof AdminProvidersRoute
+  AdminReviewsRoute: typeof AdminReviewsRoute
   AdminServicesRoute: typeof AdminServicesRoute
   AdminTicketsRoute: typeof AdminTicketsRoute
   AdminUsersRoute: typeof AdminUsersRoute
@@ -538,6 +558,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
   AdminProvidersRoute: AdminProvidersRoute,
+  AdminReviewsRoute: AdminReviewsRoute,
   AdminServicesRoute: AdminServicesRoute,
   AdminTicketsRoute: AdminTicketsRoute,
   AdminUsersRoute: AdminUsersRoute,
@@ -545,30 +566,20 @@ const AdminRouteChildren: AdminRouteChildren = {
 
 const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
-interface DashboardWalletRouteChildren {
-  DashboardWalletTopupRoute: typeof DashboardWalletTopupRoute
-}
-
-const DashboardWalletRouteChildren: DashboardWalletRouteChildren = {
-  DashboardWalletTopupRoute: DashboardWalletTopupRoute,
-}
-
-const DashboardWalletRouteWithChildren = DashboardWalletRoute._addFileChildren(
-  DashboardWalletRouteChildren,
-)
-
 interface DashboardRouteChildren {
   DashboardOrdersRoute: typeof DashboardOrdersRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardTicketsRoute: typeof DashboardTicketsRoute
-  DashboardWalletRoute: typeof DashboardWalletRouteWithChildren
+  DashboardWalletRoute: typeof DashboardWalletRoute
+  DashboardWalletTopupRoute: typeof DashboardWalletTopupRoute
 }
 
 const DashboardRouteChildren: DashboardRouteChildren = {
   DashboardOrdersRoute: DashboardOrdersRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardTicketsRoute: DashboardTicketsRoute,
-  DashboardWalletRoute: DashboardWalletRouteWithChildren,
+  DashboardWalletRoute: DashboardWalletRoute,
+  DashboardWalletTopupRoute: DashboardWalletTopupRoute,
 }
 
 const DashboardRouteWithChildren = DashboardRoute._addFileChildren(

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { PageHeader, PageShell } from "@/components/page-shell";
 import { supabase } from "@/integrations/supabase/client";
 
-export const Route = createFileRoute("/dashboard/wallet/topup")({
+export const Route = createFileRoute("/dashboard/wallet_/topup")({
   head: () => ({ meta: [{ title: "شحن المحفظة | ViralHub" }] }),
   component: TopupPage,
 });
