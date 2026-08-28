@@ -54,7 +54,7 @@ function CheckoutPage() {
         _service_id: item.serviceId,
         _quantity: item.quantity,
         _target_input: item.target,
-        _extra_note: note.trim() || item.note || undefined,
+        ...((note.trim() || item.note) ? { _extra_note: (note.trim() || item.note)! } : {}),
       });
       if (error) {
         setPlacing(false);
