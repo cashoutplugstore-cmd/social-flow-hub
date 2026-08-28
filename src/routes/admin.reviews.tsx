@@ -32,7 +32,7 @@ function AdminReviews() {
 
   const moderate = async (id: string, next: Review["status"]) => {
     setSaving(id);
-    const { error } = await supabase.rpc("admin_moderate_review", { _review_id: id, _status: next, _response: responses[id]?.trim() || null });
+    const { error } = await supabase.rpc("admin_moderate_review", { _review_id: id, _status: next, _response: responses[id]?.trim() || undefined });
     setSaving(null);
     if (error) { toast.error(error.message); return; }
     toast.success(next === "approved" ? "تم نشر التقييم" : "تم تحديث حالة التقييم");
