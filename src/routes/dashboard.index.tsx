@@ -6,7 +6,7 @@ import { PageHeader, PageShell } from "@/components/page-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { money, num } from "@/lib/format";
 
-export const Route = createFileRoute("/dashboard")({ head: () => ({ meta: [{ title: "لوحة التحكم | ViralHub" }] }), component: DashboardPage });
+export const Route = createFileRoute("/dashboard/")({ head: () => ({ meta: [{ title: "لوحة التحكم | ViralHub" }] }), component: DashboardPage });
 function DashboardPage() {
   const [loading, setLoading] = useState(true), [name, setName] = useState("مستخدم"), [balance, setBalance] = useState(0), [orders, setOrders] = useState(0), [tickets, setTickets] = useState(0);
   useEffect(() => { let active = true; (async () => { const { data: auth } = await supabase.auth.getUser(); if (!auth.user) { window.location.href = "/login"; return; } const [profile, wallet, orderRows, ticketRows] = await Promise.all([supabase.from("profiles").select("display_name").eq("id", auth.user.id).maybeSingle(), supabase.from("wallets").select("balance").eq("user_id", auth.user.id).maybeSingle(), supabase.from("orders").select("id", { count: "exact", head: true }).eq("user_id", auth.user.id), supabase.from("tickets").select("id", { count: "exact", head: true }).eq("user_id", auth.user.id)]); if (!active) return; setName(profile.data?.display_name || auth.user.email?.split("@")[0] || "مستخدم"); setBalance(wallet.data?.balance ?? 0); setOrders(orderRows.count ?? 0); setTickets(ticketRows.count ?? 0); setLoading(false); })(); return () => { active = false; }; }, []);

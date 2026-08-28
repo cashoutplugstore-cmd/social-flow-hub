@@ -5,7 +5,7 @@ import { PageHeader, PageShell } from "@/components/page-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { money, num } from "@/lib/format";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "الإدارة | ViralHub" }] }),
   component: AdminPage,
 });
