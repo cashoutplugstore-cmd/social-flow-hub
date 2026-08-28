@@ -32,9 +32,9 @@ function AdminReviews() {
 
   const moderate = async (id: string, next: Review["status"]) => {
     setSaving(id);
-    const { error } = await supabase.rpc("admin_moderate_review", { _review_id: id, _status: next, _response: responses[id]?.trim() || null });
+    const { error } = await supabase.rpc("admin_moderate_review", { _review_id: id, _status: next, ...(responses[id]?.trim() ? { _response: responses[id]!.trim() } : {}) });
     setSaving(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success(next === "approved" ? "تم نشر التقييم" : "تم تحديث حالة التقييم");
     await load();
   };
@@ -44,7 +44,7 @@ function AdminReviews() {
     setSaving(id);
     const { error } = await supabase.rpc("admin_delete_review", { _review_id: id });
     setSaving(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تم حذف التقييم");
     await load();
   };

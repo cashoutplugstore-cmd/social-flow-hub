@@ -50,7 +50,7 @@ function LoginPage() {
     }
 
     if (data.user) {
-      await supabase.rpc("bootstrap_current_user", { _display_name: data.user.user_metadata?.display_name ?? null });
+      await supabase.rpc("bootstrap_current_user", { _display_name: data.user.user_metadata?.['display_name'] ?? null });
     }
     toast.success("تم تسجيل الدخول بنجاح");
     await navigate({ to: "/" });

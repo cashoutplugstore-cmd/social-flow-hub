@@ -50,11 +50,11 @@ function AdminOrders() {
   useEffect(() => { setPage(1); }, [search, status]);
   useEffect(() => { if (page > pageCount) setPage(pageCount); }, [page, pageCount]);
 
-  const setStatusForOrder = async (id: string, nextStatus: string) => {
+  const setStatusForOrder = async (id: string, nextStatus: 'pending' | 'paid' | 'processing' | 'completed' | 'cancelled' | 'refunded') => {
     setBusy(id);
-    const { error } = await supabase.rpc("admin_set_order_status", { _order_id: id, _status: nextStatus, _admin_note: null });
+    const { error } = await supabase.rpc("admin_set_order_status", { _order_id: id, _status: nextStatus });
     setBusy(null);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("تم تحديث حالة الطلب");
     await load();
   };
@@ -79,7 +79,7 @@ function AdminOrders() {
 
         {loading ? <Loader2 className="mx-auto animate-spin" /> : visible.length === 0 ? <div className="surface-card rounded-2xl p-10 text-center text-muted-foreground">لا توجد طلبات مطابقة.</div> : <div className="space-y-3">{visible.map((r) => <div key={r.id} className="surface-card rounded-2xl p-5">
           <div className="flex flex-wrap items-center justify-between gap-4"><div><b>#{r.id.slice(0, 8)}</b><p className="text-muted-foreground text-xs">العميل: {r.user_id} · {r.quantity} وحدة</p><p className="text-muted-foreground mt-1 text-xs">{r.target_input || "بدون هدف"}</p></div><strong>{money(r.total_price)}</strong></div>
-          <div className="mt-4 flex flex-wrap gap-2">{statuses.slice(1).map((s) => <Button key={s} size="sm" variant={r.status === s ? "hero" : "outline"} disabled={busy === r.id || r.status === s} onClick={() => void setStatusForOrder(r.id, s)}>{busy === r.id && r.status !== s ? <Loader2 className="animate-spin" /> : s}</Button>)}</div>
+          <div className="mt-4 flex flex-wrap gap-2">{statuses.slice(1).map((s) => <Button key={s} size="sm" variant={r.status === s ? "hero" : "outline"} disabled={busy === r.id || r.status === s} onClick={() => void setStatusForOrder(r.id, s as Exclude<typeof s, "all">)}>{busy === r.id && r.status !== s ? <Loader2 className="animate-spin" /> : s}</Button>)}</div>
         </div>)}</div>}
 
         {pageCount > 1 && <div className="mt-6 flex items-center justify-center gap-3"><Button variant="outline" disabled={page === 1} onClick={() => setPage((p) => p - 1)}>السابق</Button><span className="text-sm">صفحة {page} من {pageCount}</span><Button variant="outline" disabled={page === pageCount} onClick={() => setPage((p) => p + 1)}>التالي</Button></div>}

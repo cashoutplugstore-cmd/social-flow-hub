@@ -45,8 +45,8 @@ function CheckoutPage() {
       await navigate({ to: "/login", search: { redirect: "/checkout" } });
       return;
     }
-    if (!items.length) return toast.error("السلة فارغة");
-    if ((balance ?? 0) < total) return toast.error("رصيد المحفظة غير كافٍ");
+    if (!items.length) { toast.error("السلة فارغة"); return; }
+    if ((balance ?? 0) < total) { toast.error("رصيد المحفظة غير كافٍ"); return; }
 
     setPlacing(true);
     for (const item of items) {
@@ -54,7 +54,7 @@ function CheckoutPage() {
         _service_id: item.serviceId,
         _quantity: item.quantity,
         _target_input: item.target,
-        _extra_note: note.trim() || item.note || null,
+        ...((note.trim() || item.note) ? { _extra_note: (note.trim() || item.note)! } : {}),
       });
       if (error) {
         setPlacing(false);
