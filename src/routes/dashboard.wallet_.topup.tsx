@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowRight, Bitcoin, CreditCard, Loader2, WalletCards, Building2 } from "lucide-react";
 import { toast } from "sonner";
@@ -22,6 +22,7 @@ const methods: { id: Method; label: string; description: string; icon: typeof Cr
 ];
 
 function TopupPage() {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState<Method>("card");
   const [loading, setLoading] = useState(true);
@@ -83,7 +84,11 @@ function TopupPage() {
       toast.success("تم إنشاء طلب الدفع. سيتم تأكيد الرصيد بعد التحقق من الدفع");
     }
     setAmount("");
-    void data;
+
+    const depositId = (data as { id?: string } | null)?.id;
+    if (depositId) {
+      void navigate({ to: "/dashboard/wallet/deposit/$id", params: { id: depositId } });
+    }
   }
 
   if (loading) {
