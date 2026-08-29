@@ -10,13 +10,31 @@ export const Route = createFileRoute("/dashboard/wallet")({
   component: WalletPage,
 });
 
+type DepositRow = {
+  id: string;
+  amount: number | string;
+  method: string;
+  status: string;
+  created_at: string;
+};
+
+const depositStatusLabel: Record<string, string> = {
+  pending: "بانتظار الدفع",
+  detected: "تم رصد الدفع",
+  confirmed: "مُعتمد",
+  failed: "فاشل",
+  expired: "منتهي الصلاحية",
+  cancelled: "ملغي",
+};
+
 function WalletPage() {
   const [balance, setBalance] = useState(0);
   const [tx, setTx] = useState<any[]>([]);
+  const [deposits, setDeposits] = useState<DepositRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   async function load(userId: string) {
-    const [w, t] = await Promise.all([
+    const [w, t, d] = await Promise.all([
       supabase.from("wallets").select("balance").eq("user_id", userId).maybeSingle(),
       supabase
         .from("wallet_transactions")
@@ -24,9 +42,16 @@ function WalletPage() {
         .eq("user_id", userId)
         .order("created_at", { ascending: false })
         .limit(30),
+      supabase
+        .from("deposit_requests")
+        .select("id,amount,method,status,created_at")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
+        .limit(10),
     ]);
     setBalance(w.data?.balance ?? 0);
     setTx(t.data ?? []);
+    setDeposits((d.data as DepositRow[] | null) ?? []);
   }
 
   useEffect(() => {
