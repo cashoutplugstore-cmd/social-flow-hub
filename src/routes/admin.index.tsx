@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Activity, BarChart3, CreditCard, Headphones, Loader2, Package, ShieldCheck, ShoppingBag, Star, Users, WalletCards, Clock, Globe2 } from "lucide-react";
+import { Activity, BarChart3, CreditCard, Headphones, Loader2, Package, ShieldCheck, ShoppingBag, Star, Users, WalletCards, Clock, Globe2, Server } from "lucide-react";
 import { PageHeader, PageShell } from "@/components/page-shell";
 import { supabase } from "@/integrations/supabase/client";
 import { money, num } from "@/lib/format";
@@ -51,9 +51,7 @@ function AdminPage() {
     setLoading(false);
   };
 
-  useEffect(() => {
-    void load();
-  }, []);
+  useEffect(() => { void load(); }, []);
 
   const cards = useMemo(() => [
     ["إيرادات 30 يوم", money(stats.revenue_range), CreditCard],
@@ -74,6 +72,7 @@ function AdminPage() {
     ["المستخدمون", "/admin/users", Users],
     ["الخدمات", "/admin/services", Package],
     ["الطلبات", "/admin/orders", ShoppingBag],
+    ["طلبات المزودين", "/admin/provider-orders", Server],
     ["المدفوعات والإيداعات", "/admin/payments", CreditCard],
     ["المراجعات", "/admin/reviews", Star],
     ["التذاكر", "/admin/tickets", Headphones],
@@ -96,6 +95,7 @@ function AdminPage() {
         <button className="surface-card rounded-xl px-4 py-2 text-sm font-bold" onClick={() => void load()}>تحديث البيانات</button>
         <Link to="/admin/orders" className="surface-card rounded-xl px-4 py-2 text-sm font-bold">مراجعة الطلبات</Link>
         <Link to="/admin/payments" className="surface-card rounded-xl px-4 py-2 text-sm font-bold">مراجعة الإيداعات</Link>
+        <Link to="/admin/provider-orders" className="surface-card rounded-xl px-4 py-2 text-sm font-bold">طلبات المزودين</Link>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map(([title, value, Icon]) => <div key={title} className="surface-card rounded-2xl p-5"><Icon className="text-primary mb-4 size-6" /><p className="text-muted-foreground text-sm">{title}</p><p className="mt-1 text-2xl font-extrabold">{typeof value === "number" ? num(value) : value}</p></div>)}
