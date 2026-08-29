@@ -84,7 +84,11 @@ function TopupPage() {
       toast.success("تم إنشاء طلب الدفع. سيتم تأكيد الرصيد بعد التحقق من الدفع");
     }
     setAmount("");
-    void data;
+
+    const depositId = (data as { id?: string } | null)?.id;
+    if (depositId) {
+      void navigate({ to: "/dashboard/wallet_/deposit/$id", params: { id: depositId } });
+    }
   }
 
   if (loading) {
