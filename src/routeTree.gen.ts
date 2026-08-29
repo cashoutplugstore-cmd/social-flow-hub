@@ -36,6 +36,7 @@ import { Route as OrderIdRouteImport } from './routes/order.$id'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as DashboardWalletTopupRouteImport } from './routes/dashboard.wallet_.topup'
+import { Route as DashboardWalletDepositIdRouteImport } from './routes/dashboard.wallet_.deposit.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -172,6 +173,12 @@ const DashboardWalletTopupRoute = DashboardWalletTopupRouteImport.update({
   path: '/dashboard/wallet/topup',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardWalletDepositIdRoute =
+  DashboardWalletDepositIdRouteImport.update({
+    id: '/dashboard/wallet_/deposit/$id',
+    path: '/dashboard/wallet/deposit/$id',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof DashboardIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/dashboard/wallet/topup': typeof DashboardWalletTopupRoute
+  '/dashboard/wallet/deposit/$id': typeof DashboardWalletDepositIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -230,6 +238,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardIndexRoute
   '/services': typeof ServicesIndexRoute
   '/dashboard/wallet/topup': typeof DashboardWalletTopupRoute
+  '/dashboard/wallet/deposit/$id': typeof DashboardWalletDepositIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -260,6 +269,7 @@ export interface FileRoutesById {
   '/dashboard/': typeof DashboardIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/dashboard/wallet_/topup': typeof DashboardWalletTopupRoute
+  '/dashboard/wallet_/deposit/$id': typeof DashboardWalletDepositIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -291,6 +301,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/services/'
     | '/dashboard/wallet/topup'
+    | '/dashboard/wallet/deposit/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -320,6 +331,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/services'
     | '/dashboard/wallet/topup'
+    | '/dashboard/wallet/deposit/$id'
   id:
     | '__root__'
     | '/'
@@ -349,6 +361,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/services/'
     | '/dashboard/wallet_/topup'
+    | '/dashboard/wallet_/deposit/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -379,6 +392,7 @@ export interface RootRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
   DashboardWalletTopupRoute: typeof DashboardWalletTopupRoute
+  DashboardWalletDepositIdRoute: typeof DashboardWalletDepositIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -572,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardWalletTopupRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/wallet_/deposit/$id': {
+      id: '/dashboard/wallet_/deposit/$id'
+      path: '/dashboard/wallet/deposit/$id'
+      fullPath: '/dashboard/wallet/deposit/$id'
+      preLoaderRoute: typeof DashboardWalletDepositIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -603,6 +624,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardIndexRoute: DashboardIndexRoute,
   ServicesIndexRoute: ServicesIndexRoute,
   DashboardWalletTopupRoute: DashboardWalletTopupRoute,
+  DashboardWalletDepositIdRoute: DashboardWalletDepositIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
