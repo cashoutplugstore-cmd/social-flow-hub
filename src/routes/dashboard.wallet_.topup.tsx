@@ -22,6 +22,7 @@ const methods: { id: Method; label: string; description: string; icon: typeof Cr
 ];
 
 function TopupPage() {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState("");
   const [method, setMethod] = useState<Method>("card");
   const [loading, setLoading] = useState(true);
