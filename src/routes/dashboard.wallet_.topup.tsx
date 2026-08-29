@@ -87,7 +87,7 @@ function TopupPage() {
 
     const depositId = (data as { id?: string } | null)?.id;
     if (depositId) {
-      void navigate({ to: "/dashboard/wallet_/deposit/$id", params: { id: depositId } });
+      void navigate({ to: "/dashboard/wallet/deposit/$id", params: { id: depositId } });
     }
   }
 
