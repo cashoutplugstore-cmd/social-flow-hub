@@ -99,7 +99,32 @@ function WalletPage() {
             </Link>
           </div>
         </div>
+        {deposits.length > 0 && (
+          <div className="mt-6">
+            <h2 className="mb-3 font-bold">طلبات الشحن</h2>
+            <div className="space-y-2">
+              {deposits.map((d) => (
+                <Link
+                  key={d.id}
+                  to="/dashboard/wallet/deposit/$id"
+                  params={{ id: d.id }}
+                  className="surface-card flex items-center justify-between gap-4 rounded-xl p-4 transition-colors hover:bg-muted/50"
+                >
+                  <div>
+                    <p className="font-medium">{d.method}</p>
+                    <p className="text-muted-foreground text-xs">{dateAr(d.created_at)}</p>
+                  </div>
+                  <div className="text-end">
+                    <strong>{money(d.amount)}</strong>
+                    <p className="text-muted-foreground text-xs">{depositStatusLabel[d.status] ?? d.status}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
         <div className="mt-6">
+
           <h2 className="mb-3 font-bold">آخر العمليات</h2>
           {tx.length === 0 ? (
             <div className="surface-card rounded-xl p-6 text-muted-foreground">لا توجد عمليات بعد.</div>
