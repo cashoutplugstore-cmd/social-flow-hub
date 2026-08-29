@@ -49,19 +49,20 @@ function CheckoutPage() {
     if ((balance ?? 0) < total) { toast.error("رصيد المحفظة غير كافٍ"); return; }
 
     setPlacing(true);
-    for (const item of items) {
-      const { error } = await supabase.rpc("place_order", {
-        _service_id: item.serviceId,
-        _quantity: item.quantity,
-        _target_input: item.target,
-        ...((note.trim() || item.note) ? { _extra_note: (note.trim() || item.note)! } : {}),
-      });
-      if (error) {
-        setPlacing(false);
-        toast.error(error.message || "تعذر إتمام الطلب");
-        return;
-      }
+    const payload = items.map((item) => ({
+      service_id: item.serviceId,
+      quantity: item.quantity,
+      target_input: item.target,
+      extra_note: note.trim() || item.note || null,
+    }));
+
+    const { error } = await supabase.rpc("place_orders_batch", { _items: payload });
+    if (error) {
+      setPlacing(false);
+      toast.error(error.message || "تعذر إتمام الطلب");
+      return;
     }
+
     clear();
     setPlacing(false);
     toast.success("تم إنشاء الطلبات بنجاح");
