@@ -22,10 +22,22 @@ type Deposit = {
   expires_at: string;
 };
 
+const STATUS_FILTERS = [
+  { id: "all", label: "الكل" },
+  { id: "pending", label: "بانتظار الدفع" },
+  { id: "detected", label: "تم رصد الدفع" },
+  { id: "confirmed", label: "معتمد" },
+  { id: "failed", label: "مرفوض/فاشل" },
+] as const;
+
+const MANUAL_METHODS = ["manual", "bank_transfer", "bitcoin"];
+
 function AdminPayments() {
   const [rows, setRows] = useState<Deposit[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
+  const [filter, setFilter] = useState<(typeof STATUS_FILTERS)[number]["id"]>("all");
+  const [reasons, setReasons] = useState<Record<string, string>>({});
 
   async function load() {
     setLoading(true);
@@ -42,6 +54,7 @@ function AdminPayments() {
   useEffect(() => {
     void load();
   }, []);
+
 
   async function approve(row: Deposit) {
     if (!["manual", "bank_transfer", "bitcoin"].includes(row.method)) {
