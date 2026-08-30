@@ -61,7 +61,7 @@ function CheckoutPage() {
         _service_id: item.service_id,
         _quantity: item.quantity,
         _target_input: item.target_input,
-        _extra_note: item.extra_note ?? undefined,
+        ...(item.extra_note ? { _extra_note: item.extra_note } : {}),
       });
       if (error) {
         setPlacing(false);
