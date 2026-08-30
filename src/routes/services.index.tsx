@@ -48,11 +48,24 @@ function ServicesPage() {
   const navigate = Route.useNavigate();
   const [q, setQ] = useState(search.q ?? "");
 
-  const activeCategory = search.category ?? "all";
   const catById = useMemo(
     () => new Map(data.categories.map((c) => [c.id, c])),
     [data.categories],
   );
+
+  const requestedCategory = search.category ?? "all";
+  const activeCategory = useMemo(() => {
+    if (requestedCategory === "all") return "all";
+    return data.categories.some((c) => c.slug === requestedCategory)
+      ? requestedCategory
+      : "all";
+  }, [data.categories, requestedCategory]);
+
+  const activeCategoryLabel = useMemo(() => {
+    if (activeCategory === "all") return null;
+    const category = data.categories.find((c) => c.slug === activeCategory);
+    return category?.name_ar ?? platformMeta(activeCategory).label;
+  }, [data.categories, activeCategory]);
 
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
@@ -114,7 +127,7 @@ function ServicesPage() {
 
         <p className="text-muted-foreground mb-5 text-sm">
           {filtered.length} خدمة{" "}
-          {activeCategory !== "all" && `في قسم ${platformMeta(activeCategory).label}`}
+          {activeCategoryLabel && `في قسم ${activeCategoryLabel}`}
         </p>
 
         {filtered.length === 0 ? (
