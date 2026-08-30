@@ -28,9 +28,11 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async () => 
     supabase.from("service_categories").select("id, slug, name_ar, name_en, description_ar, sort_order").eq("is_active", true).order("sort_order"),
     supabase.from("services").select("id, slug, name_ar, short_description_ar, description_ar, price_per_unit, unit_size, min_quantity, max_quantity, delivery_time_ar, input_label_ar, input_type, instructions_ar, notes_ar, popularity, is_active, category_id").eq("is_active", true).order("popularity", { ascending: false }),
   ]);
-  if (cats.error) throw new Error(`Catalog categories: ${cats.error.message}`);
-  if (svcs.error) throw new Error(`Catalog services: ${svcs.error.message}`);
-  return { categories: (cats.data ?? []) as PublicCategory[], services: (svcs.data ?? []) as PublicService[], error: null };
+  return {
+    categories: cats.data ?? [],
+    services: svcs.data ?? [],
+    error: cats.error?.message ?? svcs.error?.message ?? null,
+  } as { categories: PublicCategory[]; services: PublicService[]; error: string | null };
 });
 
 export const getServiceBySlug = createServerFn({ method: "GET" }).inputValidator((data: { slug: string }) => ({ slug: String(data.slug).slice(0, 120) })).handler(async ({ data }) => {
