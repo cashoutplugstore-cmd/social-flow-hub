@@ -21,6 +21,7 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminAuditRouteImport } from './routes/admin.audit'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
 import { Route as AdminPaymentsRouteImport } from './routes/admin.payments'
+import { Route as AdminProviderOrdersRouteImport } from './routes/admin.provider-orders'
 import { Route as AdminProvidersRouteImport } from './routes/admin.providers'
 import { Route as AdminReviewsRouteImport } from './routes/admin.reviews'
 import { Route as AdminServicesRouteImport } from './routes/admin.services'
@@ -96,6 +97,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
 const AdminPaymentsRoute = AdminPaymentsRouteImport.update({
   id: '/admin/payments',
   path: '/admin/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminProviderOrdersRoute = AdminProviderOrdersRouteImport.update({
+  id: '/admin/provider-orders',
+  path: '/admin/provider-orders',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminProvidersRoute = AdminProvidersRouteImport.update({
@@ -192,6 +198,7 @@ export interface FileRoutesByFullPath {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/provider-orders': typeof AdminProviderOrdersRoute
   '/admin/providers': typeof AdminProvidersRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
@@ -222,6 +229,7 @@ export interface FileRoutesByTo {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/provider-orders': typeof AdminProviderOrdersRoute
   '/admin/providers': typeof AdminProvidersRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/admin/audit': typeof AdminAuditRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/payments': typeof AdminPaymentsRoute
+  '/admin/provider-orders': typeof AdminProviderOrdersRoute
   '/admin/providers': typeof AdminProvidersRoute
   '/admin/reviews': typeof AdminReviewsRoute
   '/admin/services': typeof AdminServicesRoute
@@ -285,6 +294,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/orders'
     | '/admin/payments'
+    | '/admin/provider-orders'
     | '/admin/providers'
     | '/admin/reviews'
     | '/admin/services'
@@ -315,6 +325,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/orders'
     | '/admin/payments'
+    | '/admin/provider-orders'
     | '/admin/providers'
     | '/admin/reviews'
     | '/admin/services'
@@ -345,6 +356,7 @@ export interface FileRouteTypes {
     | '/admin/audit'
     | '/admin/orders'
     | '/admin/payments'
+    | '/admin/provider-orders'
     | '/admin/providers'
     | '/admin/reviews'
     | '/admin/services'
@@ -376,6 +388,7 @@ export interface RootRouteChildren {
   AdminAuditRoute: typeof AdminAuditRoute
   AdminOrdersRoute: typeof AdminOrdersRoute
   AdminPaymentsRoute: typeof AdminPaymentsRoute
+  AdminProviderOrdersRoute: typeof AdminProviderOrdersRoute
   AdminProvidersRoute: typeof AdminProvidersRoute
   AdminReviewsRoute: typeof AdminReviewsRoute
   AdminServicesRoute: typeof AdminServicesRoute
@@ -479,6 +492,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/payments'
       fullPath: '/admin/payments'
       preLoaderRoute: typeof AdminPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/provider-orders': {
+      id: '/admin/provider-orders'
+      path: '/admin/provider-orders'
+      fullPath: '/admin/provider-orders'
+      preLoaderRoute: typeof AdminProviderOrdersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/providers': {
@@ -608,6 +628,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAuditRoute: AdminAuditRoute,
   AdminOrdersRoute: AdminOrdersRoute,
   AdminPaymentsRoute: AdminPaymentsRoute,
+  AdminProviderOrdersRoute: AdminProviderOrdersRoute,
   AdminProvidersRoute: AdminProvidersRoute,
   AdminReviewsRoute: AdminReviewsRoute,
   AdminServicesRoute: AdminServicesRoute,

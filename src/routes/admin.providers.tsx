@@ -27,7 +27,7 @@ function AdminProviders() {
 
   async function toggle(id: string, active: boolean) {
     setBusy(id);
-    const { error } = await supabase.rpc("admin_set_provider_active", { _provider_id: id, _is_active: !active });
+    const { error } = await supabase.from("providers").update({ is_active: !active }).eq("id", id);
     setBusy(null);
     if (error) { toast.error(error.message); return; }
     toast.success(!active ? "تم تفعيل المزود" : "تم إيقاف المزود");

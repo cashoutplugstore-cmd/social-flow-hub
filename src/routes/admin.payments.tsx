@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Check, Loader2, RefreshCw, X } from "lucide-react";
 import { PageHeader, PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { money } from "@/lib/format";
 import { toast } from "sonner";
