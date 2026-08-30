@@ -38,7 +38,7 @@ function AdminProviderOrders() {
 
   async function setProviderStatus(id: string, next: string) {
     setBusy(id);
-    const { error } = await supabase.rpc("admin_set_provider_order_status", { _provider_order_id: id, _status: next });
+    const { error } = await supabase.from("provider_orders").update({ status: next, last_sync_at: new Date().toISOString() } as never).eq("id", id);
     setBusy(null);
     if (error) { toast.error(error.message); return; }
     toast.success("تم تحديث حالة تنفيذ الطلب");

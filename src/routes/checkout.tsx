@@ -56,11 +56,18 @@ function CheckoutPage() {
       extra_note: note.trim() || item.note || null,
     }));
 
-    const { error } = await supabase.rpc("place_orders_batch", { _items: payload });
-    if (error) {
-      setPlacing(false);
-      toast.error(error.message || "تعذر إتمام الطلب");
-      return;
+    for (const item of payload) {
+      const { error } = await supabase.rpc("place_order", {
+        _service_id: item.service_id,
+        _quantity: item.quantity,
+        _target_input: item.target_input,
+        _extra_note: item.extra_note ?? undefined,
+      });
+      if (error) {
+        setPlacing(false);
+        toast.error(error.message || "تعذر إتمام الطلب");
+        return;
+      }
     }
 
     clear();
