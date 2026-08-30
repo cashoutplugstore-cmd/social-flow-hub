@@ -10,7 +10,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/admin/services")({ component: AdminServices });
 
 type Category = { id: string; name_ar: string; slug: string };
-type ServiceRow = { id: string; category_id: string; slug: string; name_ar: string; price_per_unit: number; unit_size: number; min_quantity: number; max_quantity: number; is_active: boolean };
+type ServiceRow = { id: string; category_id: string; slug: string; name_ar: string; price_per_unit: number; unit_size: number; min_quantity: number; max_quantity: number; delivery_time_ar: string | null; short_description_ar: string | null; is_active: boolean };
 type FormState = { category_id: string; name_ar: string; slug: string; price_per_unit: string; unit_size: string; min_quantity: string; max_quantity: string; delivery_time_ar: string; short_description_ar: string };
 
 const empty: FormState = { category_id: "", name_ar: "", slug: "", price_per_unit: "0.01", unit_size: "1000", min_quantity: "100", max_quantity: "10000", delivery_time_ar: "0-6 ساعات", short_description_ar: "" };
@@ -28,7 +28,7 @@ function AdminServices() {
   const load = async () => {
     setLoading(true);
     const [{ data: services, error: servicesError }, { data: cats, error: catsError }] = await Promise.all([
-      supabase.from("services").select("id,category_id,slug,name_ar,price_per_unit,unit_size,min_quantity,max_quantity,is_active").order("created_at", { ascending: false }),
+      supabase.from("services").select("id,category_id,slug,name_ar,price_per_unit,unit_size,min_quantity,max_quantity,delivery_time_ar,short_description_ar,is_active").order("created_at", { ascending: false }),
       supabase.from("service_categories").select("id,name_ar,slug").order("sort_order", { ascending: true }),
     ]);
     if (servicesError) toast.error(`الخدمات: ${servicesError.message}`);
@@ -107,6 +107,8 @@ function AdminServices() {
           <Input type="number" min="1" placeholder="حجم الوحدة" value={form.unit_size} onChange={e => setForm({ ...form, unit_size: e.target.value })} />
           <Input type="number" min="1" placeholder="الحد الأدنى" value={form.min_quantity} onChange={e => setForm({ ...form, min_quantity: e.target.value })} />
           <Input type="number" min="1" placeholder="الحد الأقصى" value={form.max_quantity} onChange={e => setForm({ ...form, max_quantity: e.target.value })} />
+          <Input placeholder="مدة التنفيذ (مثال: 0-6 ساعات)" value={form.delivery_time_ar} onChange={e => setForm({ ...form, delivery_time_ar: e.target.value })} />
+          <Input placeholder="وصف مختصر للخدمة" value={form.short_description_ar} onChange={e => setForm({ ...form, short_description_ar: e.target.value })} />
         </div>}
         <Button className="mt-4" variant="hero" onClick={() => void save()} disabled={saving || categories.length === 0}>{saving ? <Loader2 className="animate-spin" /> : editing ? <Save /> : <Plus />}{editing ? "حفظ التعديل" : "نشر الخدمة"}</Button>
       </div>
