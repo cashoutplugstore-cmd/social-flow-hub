@@ -11,9 +11,9 @@ export const Route = createFileRoute("/admin/services")({ component: AdminServic
 
 type Category = { id: string; name_ar: string; slug: string };
 type ServiceRow = { id: string; category_id: string; slug: string; name_ar: string; price_per_unit: number; unit_size: number; min_quantity: number; max_quantity: number; is_active: boolean };
-type FormState = { category_id: string; name_ar: string; slug: string; price_per_unit: string; unit_size: string; min_quantity: string; max_quantity: string };
+type FormState = { category_id: string; name_ar: string; slug: string; price_per_unit: string; unit_size: string; min_quantity: string; max_quantity: string; delivery_time_ar: string; short_description_ar: string };
 
-const empty: FormState = { category_id: "", name_ar: "", slug: "", price_per_unit: "0.01", unit_size: "1000", min_quantity: "100", max_quantity: "10000" };
+const empty: FormState = { category_id: "", name_ar: "", slug: "", price_per_unit: "0.01", unit_size: "1000", min_quantity: "100", max_quantity: "10000", delivery_time_ar: "0-6 ساعات", short_description_ar: "" };
 
 function AdminServices() {
   const [rows, setRows] = useState<ServiceRow[]>([]);
