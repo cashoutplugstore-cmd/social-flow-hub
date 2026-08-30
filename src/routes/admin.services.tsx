@@ -70,7 +70,7 @@ function AdminServices() {
   };
 
   const edit = (x: ServiceRow) => {
-    setForm({ category_id: x.category_id, name_ar: x.name_ar, slug: x.slug, price_per_unit: String(x.price_per_unit), unit_size: String(x.unit_size), min_quantity: String(x.min_quantity), max_quantity: String(x.max_quantity) });
+    setForm({ category_id: x.category_id, name_ar: x.name_ar, slug: x.slug, price_per_unit: String(x.price_per_unit), unit_size: String(x.unit_size), min_quantity: String(x.min_quantity), max_quantity: String(x.max_quantity), delivery_time_ar: x.delivery_time_ar ?? "0-6 ساعات", short_description_ar: x.short_description_ar ?? "" });
     setEditing(x.id);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
