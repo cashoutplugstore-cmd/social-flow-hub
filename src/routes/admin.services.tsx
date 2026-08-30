@@ -58,7 +58,7 @@ function AdminServices() {
     const price = Number(form.price_per_unit), unit = Number(form.unit_size), min = Number(form.min_quantity), max = Number(form.max_quantity);
     if (![price, unit, min, max].every(Number.isFinite) || price < 0 || unit <= 0 || min <= 0 || max < min) { toast.error("تحقق من السعر والحدود والأرقام"); return; }
     setSaving(true);
-    const payload = { category_id: form.category_id, name_ar: form.name_ar.trim(), slug: form.slug.trim(), price_per_unit: price, unit_size: unit, min_quantity: min, max_quantity: max, is_active: true };
+    const payload = { category_id: form.category_id, name_ar: form.name_ar.trim(), slug: form.slug.trim(), price_per_unit: price, unit_size: unit, min_quantity: min, max_quantity: max, delivery_time_ar: form.delivery_time_ar.trim() || "0-6 ساعات", short_description_ar: form.short_description_ar.trim() || null, is_active: true, is_demo: false };
     const queryBuilder = editing ? supabase.from("services").update(payload).eq("id", editing) : supabase.from("services").insert(payload);
     const { error } = await queryBuilder;
     setSaving(false);
